@@ -8,26 +8,30 @@ async def read_root():
 
 # Authentication Routes
 
-@app.post("/api/v1/auth/register")
-async def register_user():
-    return {"message": "User registered successfully"}
 
-# Login Route
-@app.post("/api/v1/auth/login")
-async def login_user():
-    return {"message": "User logged in successfully"}   
+# Movie Endpoints 
+# Get All Movies Route
+@app.get("/api/v1/movies")
+async def get_all_movies():
+    return {"message": "List of all movies"}
 
-# Token Refresh Route
-@app.post("/api/v1/auth/refresh ")
-async def refresh_token():
-    return {"message": "Token refreshed successfully"}
+# Get Movie by ID Route
+@app.get("/api/v1/movies/{id}")
+async def get_movie_by_id(id: int):
+    return {"message": f"Details of movie with id {id}"}
 
-# Logout Route
-@app.post("/api/v1/auth/logout")
-async def logout_user():
-    return {"message": "User logged out successfully"} 
+# Search Movies Route
+@app.get("/api/v1/movies/search")
+async def search_movies(query: str):
+    return {"message": f"Search results for query: {query}"}
 
-# Get Current User Route
-@app.get("/api/v1/auth/me") 
-async def get_current_user():
-    return {"message": "Current user details"}
+# Get Movie Genres Route
+@app.get("/api/v1/movies/genres")
+async def get_movie_genres():
+    return {"message": "List of movie genres"}
+
+# Get Movies by Genre Route
+@app.get("/api/v1/movies/genre/{id}")
+async def get_movies():
+    return {"message": "List of movies"}
+

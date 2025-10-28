@@ -76,7 +76,12 @@ class MovieService:
         release_year: Optional[int] = None
     ) -> tuple[List[Movie], int]:
         """Get movies with filters and pagination"""
-        query = db.query(Movie)
+        from sqlalchemy.orm import joinedload
+        
+        query = db.query(Movie).options(
+            joinedload(Movie.movie_genres).joinedload(MovieGenre.genre),
+            joinedload(Movie.video_files)
+        )
         
         # Apply filters
         if search:

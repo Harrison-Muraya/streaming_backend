@@ -1,12 +1,13 @@
 """
 Script to seed the database with sample genres and movies
-Run this after creating your first admin user
+Run this from the project root directory:
+    python seed_data.py
 """
 import sys
 import os
 
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Ensure we can import from app
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app.database import SessionLocal
 from app.models.movie import Genre, Movie, MovieGenre
@@ -193,18 +194,27 @@ def main():
     print("🌱 SEEDING DATABASE")
     print("=" * 60 + "\n")
     
-    seed_admin_user()
-    seed_genres()
-    seed_sample_movies()
-    
-    print("=" * 60)
-    print("✅ DATABASE SEEDING COMPLETE!")
-    print("=" * 60)
-    print("\n📝 Next steps:")
-    print("1. Start the server: python -m app.main")
-    print("2. Login as admin at: http://localhost:8000/docs")
-    print("3. Test the movie endpoints")
-    print("\n")
+    try:
+        seed_admin_user()
+        seed_genres()
+        seed_sample_movies()
+        
+        print("=" * 60)
+        print("✅ DATABASE SEEDING COMPLETE!")
+        print("=" * 60)
+        print("\n📝 Next steps:")
+        print("1. Start the server: python -m app.main")
+        print("2. Login as admin at: http://localhost:8000/docs")
+        print("3. Test the movie endpoints")
+        print("\n")
+    except Exception as e:
+        print(f"\n❌ Error during seeding: {e}")
+        print("\nMake sure:")
+        print("1. PostgreSQL is running")
+        print("2. Database connection in .env is correct")
+        print("3. You're running from the project root directory")
+        import traceback
+        traceback.print_exc()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 from typing import Optional, List
-from fastapi import APIRouter, Depends, Query, status, HTTPException, status
+from fastapi import APIRouter, Depends, Query, status, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.movie import (
@@ -13,7 +13,11 @@ import math
 
 router = APIRouter()
 
-# create movie endpoints
+
+# ============================================
+# MOVIE ENDPOINTS
+# ============================================
+
 @router.post("/", response_model=MovieResponse, status_code=status.HTTP_201_CREATED)
 async def create_movie(
     movie_data: MovieCreate,
@@ -35,7 +39,7 @@ async def create_movie(
     movie = MovieService.create_movie(movie_data, db)
     return movie
 
-# Show movie endpoints
+
 @router.get("/", response_model=MovieList)
 async def get_movies(
     page: int = Query(1, ge=1, description="Page number"),
@@ -78,7 +82,6 @@ async def get_movies(
     )
 
 
-# Get movie by ID
 @router.get("/{movie_id}", response_model=MovieResponse)
 async def get_movie(
     movie_id: int,
@@ -93,7 +96,6 @@ async def get_movie(
     return movie
 
 
-# Update movie endpoints
 @router.put("/{movie_id}", response_model=MovieResponse)
 async def update_movie(
     movie_id: int,
@@ -110,7 +112,6 @@ async def update_movie(
     return movie
 
 
-# Delete movie endpoints
 @router.delete("/{movie_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_movie(
     movie_id: int,
@@ -126,7 +127,6 @@ async def delete_movie(
     return None
 
 
-# Increment view count endpoint
 @router.post("/{movie_id}/view", status_code=status.HTTP_200_OK)
 async def increment_view_count(
     movie_id: int,
@@ -142,7 +142,6 @@ async def increment_view_count(
     return {"message": "View count incremented"}
 
 
-# Get streaming URL endpoint
 @router.get("/{movie_id}/stream")
 async def get_stream_url(
     movie_id: int,

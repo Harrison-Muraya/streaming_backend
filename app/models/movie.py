@@ -12,7 +12,7 @@ class Genre(Base):
     slug = Column(String(50), unique=True, nullable=False)
     
     # Relationships
-    movie_genres = relationship("MovieGenre", back_populates="genre")
+    movie_genres = relationship("MovieGenre", back_populates="genre", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<Genre {self.name}>"
@@ -51,11 +51,17 @@ class Movie(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
-    genres = relationship("MovieGenre", back_populates="movie", cascade="all, delete-orphan")
+    movie_genres = relationship("MovieGenre", back_populates="movie", cascade="all, delete-orphan")
     video_files = relationship("VideoFile", back_populates="movie", cascade="all, delete-orphan")
     conversion_jobs = relationship("ConversionJob", back_populates="movie", cascade="all, delete-orphan")
     watch_history = relationship("WatchHistory", back_populates="movie", cascade="all, delete-orphan")
     ratings = relationship("MovieRating", back_populates="movie", cascade="all, delete-orphan")
+    
+    # Property to get actual genres (not MovieGenre objects)
+    @property
+    def genres(self):
+        """Return list of Genre objects instead of MovieGenre objects"""
+        return [mg.genre for mg in self.movie_genres]
     
     def __repr__(self):
         return f"<Movie {self.title}>"
@@ -69,7 +75,7 @@ class MovieGenre(Base):
     genre_id = Column(Integer, ForeignKey("genres.id", ondelete="CASCADE"), nullable=False)
     
     # Relationships
-    movie = relationship("Movie", back_populates="genres")
+    movie = relationship("Movie", back_populates="movie_genres")
     genre = relationship("Genre", back_populates="movie_genres")
     
     def __repr__(self):

@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.config import settings
 from app.database import create_tables
-from app.api.v1 import api_router  # Import the API router
+from app.api.v1 import api_router
 import os
 
 # Create FastAPI app
@@ -64,6 +64,7 @@ async def health_check():
 
 # Include API v1 router
 app.include_router(api_router, prefix="/api/v1")
+
 
 
 if __name__ == "__main__":
